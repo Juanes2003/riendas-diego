@@ -27,7 +27,8 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs)/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs)/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html,body{max-width:100%}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button,input,select{font:inherit}
@@ -40,7 +41,13 @@ html.theme-transition,html.theme-transition *,html.theme-transition *::before,ht
 
 /* Header */
 .site-header{background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
-.header-row{display:grid;grid-template-columns:180px 1fr 320px;align-items:center;gap:18px;min-height:74px}
+.header-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;min-height:74px;position:relative}
+.mobile-menu{display:contents}
+.menu-toggle{display:none;align-items:center;justify-content:center;flex-direction:column;gap:5px;width:42px;height:42px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;padding:0}
+.menu-toggle span{display:block;width:18px;height:1.8px;background:currentColor;transition:transform var(--dur-fast) var(--ease),opacity var(--dur-fast) var(--ease)}
+.menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6.8px) rotate(45deg)}
+.menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.8px) rotate(-45deg)}
 .logo{display:inline-flex;align-items:center;gap:10px;font-family:"Brush Script MT","Segoe Script",cursive;font-size:34px;line-height:1;color:var(--ink);letter-spacing:.01em}
 .logo img{width:42px;height:42px;object-fit:contain;display:block;transition:filter var(--dur) var(--ease),opacity var(--dur) var(--ease)}
 :root[data-theme="dark"] .logo img{filter:brightness(0) invert(.92)}
@@ -50,8 +57,8 @@ html.theme-transition,html.theme-transition *,html.theme-transition *::before,ht
 .main-nav a,.main-nav button{background:none;border:0;padding:0;color:inherit;cursor:pointer;opacity:.92;transition:opacity var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease)}
 @media (hover:hover){.main-nav a:hover,.main-nav button:hover{opacity:1;transform:translateY(-1px)}}
 .caret::after{content:" ▾";font-size:10px;opacity:.7}
-.header-tools{display:flex;justify-content:flex-end;align-items:center;gap:10px}
-.search-wrap{position:relative;flex:1;max-width:220px}
+.header-tools{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:nowrap}
+.search-wrap{position:relative;flex:0 1 180px;min-width:120px;max-width:220px}
 .search-wrap input{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:8px 28px 8px 0;color:var(--ink);font-size:13px}
 .search-wrap input::placeholder{color:var(--muted)}
 .search-wrap .icon{position:absolute;right:0;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px;pointer-events:none}
@@ -234,20 +241,52 @@ body.loaded .site-header{opacity:1;transform:none}
 
 :root[data-reduce-motion="reduce"],:root[data-reduce-motion="reduce"] *,:root[data-reduce-motion="reduce"] *::before,:root[data-reduce-motion="reduce"] *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media (max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.header-row{grid-template-columns:160px 1fr}}
+@media (max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.header-row{grid-template-columns:auto 1fr auto;gap:12px}.main-nav{gap:14px;font-size:10px}}
 @media (max-width:900px){
-  .header-row{grid-template-columns:1fr;gap:10px;padding:12px 0}
-  .logo{text-align:center}
-  .main-nav{order:3;gap:14px}
-  .header-tools{justify-content:center;flex-wrap:wrap}
-  .shop-layout{grid-template-columns:1fr}
+  .header-row{grid-template-columns:1fr auto;gap:8px;padding:10px 0}
+  .logo{justify-content:flex-start;font-size:30px}
+  .logo img{width:36px;height:36px}
+  .menu-toggle{display:inline-flex}
+  .mobile-menu{display:none;grid-column:1/-1;background:var(--bg);border-top:1px solid var(--line);padding:14px 0 6px}
+  .mobile-menu.open{display:block}
+  .main-nav{justify-content:flex-start;gap:0;flex-direction:column;align-items:stretch;font-size:12px}
+  .main-nav a,.main-nav button{padding:12px 0;border-bottom:1px solid var(--line);text-align:left}
+  .header-tools{justify-content:flex-start;flex-wrap:wrap;gap:8px;padding-top:12px}
+  .search-wrap{flex:1 1 100%;max-width:none;min-width:0}
+  .tool-btn{font-size:12px;padding:8px 10px;border:1px solid var(--line)}
+  .shop-layout{grid-template-columns:1fr;gap:22px;padding:22px 0 48px}
   .sidebar{position:static}
+  .sidebar .cat-list,.sidebar .side-search{display:none}
   .banners{grid-template-columns:1fr}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .banner{min-height:170px}
+  .grid.gallery-mobile{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .footer-grid{grid-template-columns:1fr}
-  .panel{top:140px}
+  .panel{top:auto;bottom:12px;right:12px;left:12px;width:auto;max-height:70vh;overflow:auto;transform-origin:bottom center}
+  .pay-modal{padding:10px;align-items:flex-end}
+  .pay-card{max-height:88vh;padding:18px}
 }
-@media (max-width:560px){.grid{grid-template-columns:1fr}.container{padding:0 16px}.hero{min-height:300px}.toolbar{flex-direction:column;align-items:flex-start}}
+@media (max-width:560px){
+  .container{padding:0 12px}
+  .hero{min-height:240px}
+  .hero-inner{padding:34px 12px}
+  .hero p{font-size:14.5px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .product-card h3{font-size:12.5px;margin:10px 6px 4px}
+  .price{font-size:13px;margin-bottom:8px}
+  .btn-dark{padding:10px 8px;font-size:10px;letter-spacing:.05em}
+  .toolbar{flex-direction:column;align-items:stretch;gap:10px}
+  .toolbar select{min-width:0;width:100%}
+  .cat-list a,.cat-list button{padding:11px 0}
+  .promo-box,.about-card{padding:18px 16px}
+  .footer-bottom{font-size:12px}
+  .drawer{width:100%;max-width:none}
+  .pay-row{grid-template-columns:1fr}
+  .pay-methods{grid-template-columns:1fr}
+  .pay-card h3{font-size:26px}
+  .wa-float{width:52px;height:52px;right:14px;bottom:14px}
+  .wa-float svg{width:26px;height:26px}
+}
 </style>
 </head>
 <body>
@@ -256,24 +295,27 @@ body.loaded .site-header{opacity:1;transform:none}
 <header class="site-header">
   <div class="container header-row">
     <a class="logo" href="#" aria-label="Inicio"><img src="icono.png" alt="">Riendas Diego</a>
-    <nav class="main-nav" aria-label="Navegación principal">
-      <a href="#catalogo" data-cat="Sillas &amp; Monturas">Sillas &amp; Monturas</a>
-      <a href="#catalogo" data-cat="Botas">Botas</a>
-      <a href="#catalogo" data-cat="Accesorios">Accesorios</a>
-      <a href="#catalogo" data-cat="Cuidado Equino">Cuidado Equino</a>
-      <a href="#catalogo" data-cat="Marroquinería">Marroquinería</a>
-    </nav>
-    <div class="header-tools">
-      <div class="search-wrap">
-        <input type="search" id="headerSearch" placeholder="Buscar productos" aria-label="Buscar productos">
-        <span class="icon" aria-hidden="true">⌕</span>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    <div class="mobile-menu" id="mobileMenu">
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="#catalogo" data-cat="Sillas &amp; Monturas">Sillas &amp; Monturas</a>
+        <a href="#catalogo" data-cat="Botas">Botas</a>
+        <a href="#catalogo" data-cat="Accesorios">Accesorios</a>
+        <a href="#catalogo" data-cat="Cuidado Equino">Cuidado Equino</a>
+        <a href="#catalogo" data-cat="Marroquinería">Marroquinería</a>
+      </nav>
+      <div class="header-tools">
+        <div class="search-wrap">
+          <input type="search" id="headerSearch" placeholder="Buscar productos" aria-label="Buscar productos">
+          <span class="icon" aria-hidden="true">⌕</span>
+        </div>
+        <button class="tool-btn" id="a11yBtn" type="button" aria-expanded="false" aria-controls="a11yPanel">Accesibilidad</button>
+        <button class="tool-btn fav-head" id="favOpenBtn" type="button" aria-expanded="false" aria-controls="favPanel" aria-label="Favoritos">
+          <svg class="heart-ico" viewBox="0 0 24 24" aria-hidden="true"><path class="heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span id="favCount">0</span>
+        </button>
+        <button class="tool-btn" id="open" type="button">Carrito (<span id="count">0</span>)</button>
       </div>
-      <button class="tool-btn" id="a11yBtn" type="button" aria-expanded="false" aria-controls="a11yPanel">Accesibilidad</button>
-      <button class="tool-btn fav-head" id="favOpenBtn" type="button" aria-expanded="false" aria-controls="favPanel" aria-label="Favoritos">
-        <svg class="heart-ico" viewBox="0 0 24 24" aria-hidden="true"><path class="heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <span id="favCount">0</span>
-      </button>
-      <button class="tool-btn" id="open" type="button">Carrito (<span id="count">0</span>)</button>
     </div>
   </div>
 </header>
@@ -324,7 +366,7 @@ body.loaded .site-header{opacity:1;transform:none}
           </select>
         </label>
       </div>
-      <div class="grid" id="grid"></div>
+      <div class="grid gallery-mobile" id="grid"></div>
     </section>
   </div>
 
@@ -613,7 +655,7 @@ function togglePanel(id,btnId){ const p=$(id),open=!p.classList.contains("open")
 document.addEventListener("click", e => {
   if (e.target.id === "payScrim") closePay();
   const cat = e.target.closest("[data-cat]");
-  if (cat) { e.preventDefault(); setActiveCat(cat.dataset.cat || ""); document.getElementById("catalogo").scrollIntoView({behavior:"smooth", block:"start"}); return; }
+  if (cat) { e.preventDefault(); setActiveCat(cat.dataset.cat || ""); setMenu(false); document.getElementById("catalogo").scrollIntoView({behavior:"smooth", block:"start"}); return; }
   const m = e.target.closest("[data-method]"); if (m) { payMethod = m.dataset.method; renderPay(); }
   const pay = e.target.closest("[data-pay]"); if (pay) { openPay(pay.dataset.pay); return; }
   const t = e.target.closest("[data-select],[data-add],[data-inc],[data-dec],[data-fav],[data-unfav]");
@@ -630,11 +672,14 @@ document.addEventListener("click", e => {
   if (t.dataset.fav) { const id=+t.dataset.fav; favs = favs.includes(id)?favs.filter(x=>x!==id):favs.concat(id); renderProducts(); renderFavs(); }
   if (t.dataset.unfav) { favs = favs.filter(x=>x!==+t.dataset.unfav); renderProducts(); renderFavs(); }
 });
-$("open").onclick=()=>toggleCart(true); $("close").onclick=()=>toggleCart(false); $("scrim").onclick=()=>toggleCart(false);
+$("open").onclick=()=>{ toggleCart(true); setMenu(false); }; $("close").onclick=()=>toggleCart(false); $("scrim").onclick=()=>toggleCart(false);
 if ($("send")) $("send").addEventListener("click",e=>{ if(!Object.values(cart).some(q=>q>0)) e.preventDefault(); });
-$("a11yBtn").onclick=()=>togglePanel("a11yPanel","a11yBtn");
+const menuToggle = $("menuToggle"), mobileMenu = $("mobileMenu");
+function setMenu(open){ if(!mobileMenu||!menuToggle) return; mobileMenu.classList.toggle("open",open); menuToggle.setAttribute("aria-expanded",String(open)); }
+if (menuToggle) menuToggle.onclick=()=>setMenu(!mobileMenu.classList.contains("open"));
+$("a11yBtn").onclick=()=>{ togglePanel("a11yPanel","a11yBtn"); setMenu(false); };
 $("themeToggle").onchange=()=>toggleThemeAnimated();
-$("favOpenBtn").onclick=()=>togglePanel("favPanel","favOpenBtn");
+$("favOpenBtn").onclick=()=>{ togglePanel("favPanel","favOpenBtn"); setMenu(false); };
 $("contrastChk").onchange=e=>{ prefs.contrast=e.target.checked; applyPrefs(); };
 $("motionChk").onchange=e=>{ prefs.reduce=e.target.checked; applyPrefs(); };
 $("sortSel").onchange=e=>{ sort=e.target.value; renderProducts(); };
