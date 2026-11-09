@@ -331,7 +331,19 @@ body.loaded .site-header{opacity:1;transform:none}
 :root[data-theme="dark"]{--bg:#111;--ink:#f7f7f7;--muted:#bbb;--line:#333;--soft:#1b1b1b;--navy:#eee;--navy-h:#ccc;--gold:#aaa;--espresso:#080808}
 .header-row{grid-template-columns:auto 1fr auto}.search-toggle{display:inline-grid;place-items:center;width:40px;height:40px;border:0;background:transparent;color:var(--ink);cursor:pointer}.search-toggle svg,.cart-head svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.cart-head{display:inline-flex;align-items:center;gap:4px}.hero{background:#fff;color:#111}.hero::after{background:linear-gradient(90deg,#fff 3%,#fff 42%,transparent 74%)}.hero-bg{filter:grayscale(1) brightness(.9)}.hero-inner::before{color:#333}.hero h1 em{color:#444}.hero p{color:#555}.hero-cta{background:#111;color:#fff}.hero-seal{border-color:#999;color:#333}.hero-seal:before{border-color:#999}.trust-strip b{font-weight:500}.wa-float{background:#111}
 @media(max-width:900px){.header-row{grid-template-columns:44px 1fr auto;grid-template-rows:auto auto;gap:8px;padding:10px 0;min-height:64px}.menu-toggle{grid-column:1;grid-row:1;display:inline-flex}.logo{grid-column:2;grid-row:1;justify-self:center}.header-tools{grid-column:3;grid-row:1;display:flex;align-items:center;justify-content:flex-end;gap:2px;padding:0}.header-tools #a11yBtn,.header-tools #favOpenBtn{display:none}.header-tools #open{padding:8px}.header-tools .search-wrap{display:none;position:absolute;top:58px;right:0;width:min(280px,calc(100vw - 40px));min-width:0;background:var(--bg);padding:10px;border:1px solid var(--line);z-index:5}.header-tools .search-wrap.open{display:block}.search-wrap input{width:100%}.header-tools .search-toggle{order:2}.header-tools #open{order:1}.mobile-menu{grid-column:1/-1;grid-row:2}.hero{background:#fff}.hero::after{background:linear-gradient(90deg,#fff 20%,rgba(255,255,255,.85) 65%,rgba(255,255,255,.2))}}
-@media(max-width:600px){.hero-bg{left:0;width:100%;opacity:.12}.hero::after{background:linear-gradient(90deg,#fff,rgba(255,255,255,.7))}.trust-strip{background:#fff}}
+@media(max-width:600px){
+/* Galería móvil */
+.shop-layout{padding-top:30px}.catalog-heading{margin-bottom:18px}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 12px;align-items:start}
+.product-card{min-width:0}.product-media{aspect-ratio:1/1.08;border:0;background:#f3f3f3;overflow:hidden}
+.product-media img{padding:7px;object-fit:contain}
+.product-category{margin-top:12px;font-size:8px;letter-spacing:.09em}
+.product-card h3{font-size:12px;line-height:1.4;min-height:34px;margin:5px 0 7px}
+.price{font-size:12px;margin-bottom:12px}.product-card .btn-dark{min-height:40px;padding:10px 4px;font-size:9px}
+.heart-btn{left:8px;top:8px;width:34px;height:34px}.badge-soldout{right:8px;top:8px}
+.media-placeholder{min-height:100%;}.media-placeholder .placeholder-mark{font-size:36px}
+.sidebar .cat-list{scrollbar-width:none}.sidebar .cat-list::-webkit-scrollbar{display:none}
+.hero-bg{left:0;width:100%;opacity:.12}.hero::after{background:linear-gradient(90deg,#fff,rgba(255,255,255,.7))}.trust-strip{background:#fff}}
 
 </style>
 </head>
@@ -724,7 +736,15 @@ document.addEventListener("click", e => {
   }
   if (t.dataset.inc) { cart[t.dataset.inc]++; renderCart(); }
   if (t.dataset.dec) { cart[t.dataset.dec]--; if (cart[t.dataset.dec]<=0) delete cart[t.dataset.dec]; renderCart(); }
-  if (t.dataset.fav) { const id=+t.dataset.fav; favs = favs.includes(id)?favs.filter(x=>x!==id):favs.concat(id); renderProducts(); renderFavs(); }
+  if (t.dataset.fav) {
+    const id=+t.dataset.fav;
+    favs = favs.includes(id)?favs.filter(x=>x!==id):favs.concat(id);
+    const selected = favs.includes(id);
+    t.classList.toggle("on",selected);
+    t.setAttribute("aria-pressed",String(selected));
+    t.setAttribute("aria-label",selected?"Quitar de favoritos":"Agregar a favoritos");
+    renderFavs();
+  }
   if (t.dataset.unfav) { favs = favs.filter(x=>x!==+t.dataset.unfav); renderProducts(); renderFavs(); }
 });
 $("open").onclick=()=>{ toggleCart(true); setMenu(false); }; $("close").onclick=()=>toggleCart(false); $("scrim").onclick=()=>toggleCart(false);
