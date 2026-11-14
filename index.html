@@ -48,6 +48,10 @@
     .header-inner{height:78px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
     .brand{font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:.14em;line-height:1;white-space:nowrap;text-transform:uppercase;justify-self:start;display:inline-flex;align-items:center;gap:10px}
     .brand img{width:29px;height:29px;object-fit:contain}.brand img[hidden]{display:none}
+    /* Logotipo monocromático adaptativo en ambos temas. */
+    .brand img{filter:brightness(0);transition:filter .3s var(--ease)}
+    :root[data-theme="dark"] .brand img{filter:brightness(0) invert(1)}
+
     .main-nav{display:flex;justify-content:center;gap:32px;align-items:center;font-size:12px}.main-nav a{padding:10px 0;position:relative}.main-nav a:after{content:'';position:absolute;bottom:5px;left:0;right:100%;height:1px;background:var(--ink);transition:right .25s}.main-nav a:hover:after{right:0}
     .header-actions{display:flex;justify-content:flex-end;align-items:center;gap:5px}.menu-toggle{display:none}.brand-mobile{display:none}
     .search-pop{position:absolute;top:calc(100% + 9px);right:max(40px,calc((100% - 1320px)/2));width:min(410px,calc(100vw - 32px));border:1px solid var(--line);background:var(--paper);box-shadow:var(--shadow);padding:18px 20px 14px;z-index:42}
@@ -57,7 +61,7 @@
     .hero{background:#fff;color:#151515;position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:548px;overflow:hidden}
     .hero-copy{position:relative;z-index:2;align-self:center;width:100%;padding:66px 7% 68px max(40px,calc((100vw - 1320px)/2));max-width:730px}
     .hero-copy .eyebrow{color:#727272}.hero h1{font:400 clamp(48px,5.65vw,81px)/1.1 var(--serif);letter-spacing:-.045em;margin:25px 0 23px;max-width:650px}.hero h1 em{font-weight:400;color:#5e5e5e}
-    .hero-description{font-size:15px;line-height:1.85;color:#606060;max-width:440px;margin:0}.hero-ctas{margin-top:35px;display:flex;align-items:center;gap:29px;flex-wrap:wrap}.hero .button{background:#161616;border-color:#161616;color:#fff}.hero .button:hover{background:#fff;color:#161616}
+    .hero-description{font-size:15px;line-height:1.85;color:#606060;max-width:440px;margin:0}.hero-ctas{margin-top:35px;display:flex;align-items:center;gap:29px;flex-wrap:wrap}.hero .button{background:#161616;border-color:#161616;color:#fff}.hero .button:hover{background:#fff;color:#161616}.button-arrow{width:14px;height:14px;display:inline-block;flex:0 0 auto;vertical-align:middle;margin-left:10px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transform:translateY(-.5px);transition:transform .25s var(--ease),opacity .25s var(--ease)} .button:hover .button-arrow,.text-link:hover .button-arrow,.search-footer button:hover .button-arrow,.sidebar-note a:hover .button-arrow{transform:translate(2px,-2px)} .button,.text-link,.sidebar-note a,#searchResultsBtn{display:inline-flex;align-items:center} svg.button-arrow,svg.button-arrow path{stroke:currentColor;fill:none}
     .hero-art{position:relative;overflow:hidden;min-height:460px;background:#f3f3f2;border-left:1px solid #eee;display:grid;place-items:center}
     .hero-art:before,.hero-art:after{content:'';position:absolute;border:1px solid #d7d7d6;aspect-ratio:1;border-radius:100%;width:75%;max-width:475px}.hero-art:after{width:63%;max-width:395px}
     .hero-art .decor-lines{position:absolute;inset:0;background:repeating-linear-gradient(133deg,transparent 0,transparent 91px,#dddddc 92px,transparent 93px);opacity:.26}
@@ -305,7 +309,7 @@
   </div>
   <div id="searchPop" class="search-pop" hidden>
     <div class="search-line"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.7" cy="10.7" r="6.7"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" autocomplete="off" placeholder="¿Qué estás buscando?" aria-label="Buscar en el catálogo"></div>
-    <div class="search-footer"><p id="searchHint" aria-live="polite">Busca por producto o categoría · Esc para cerrar.</p><button id="searchResultsBtn" type="button">Ver resultados <span aria-hidden="true">↗</span></button></div>
+    <div class="search-footer"><p id="searchHint" aria-live="polite">Busca por producto o categoría · Esc para cerrar.</p><button id="searchResultsBtn" type="button">Ver resultados <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></button></div>
   </div>
 </header>
 <nav id="mobileMenu" class="mobile-menu" aria-label="Menú móvil" aria-hidden="true" inert>
@@ -320,7 +324,7 @@
     <div class="eyebrow">NUEVA MARCA · BELLO, ANTIOQUIA</div>
     <h1>Cuero con<br><em>carácter propio.</em></h1>
     <p class="hero-description">Diseño, cuero y accesorios para acompañarte en el mundo equino y ganadero.</p>
-    <div class="hero-ctas"><a class="button" href="#catalogo">Explorar colección <span aria-hidden="true">↗</span></a><a class="text-link" href="#quienes-somos">Conoce la marca</a></div>
+    <div class="hero-ctas"><a class="button" href="#catalogo">Explorar colección <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></a><a class="text-link" href="#quienes-somos">Conoce la marca</a></div>
   </div>
   <div class="hero-art" aria-hidden="true"><div class="decor-lines"></div><span class="hero-mark">RD</span><span class="hero-stamp">RIENDAS DIEGO / COLOMBIA</span><img src="referencia-riendas.png" class="hero-photograph" alt="" onerror="this.hidden=true"></div>
 </section>
@@ -340,7 +344,7 @@
       <li><button type="button" data-category="Cuidado Equino">Cuidado Equino</button></li>
       <li><button type="button" data-category="Marroquinería">Marroquinería</button></li>
     </ul>
-    <div class="sidebar-note"><b>Una pieza para cada historia.</b><p>Pregunta por los productos y acabados disponibles. Estamos para ayudarte a elegir.</p><a href="https://wa.me/573207534152" target="_blank" rel="noopener noreferrer">Hablar por WhatsApp ↗</a></div>
+    <div class="sidebar-note"><b>Una pieza para cada historia.</b><p>Pregunta por los productos y acabados disponibles. Estamos para ayudarte a elegir.</p><a href="https://wa.me/573207534152" target="_blank" rel="noopener noreferrer">Hablar por WhatsApp <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></a></div>
   </aside>
   <section class="catalog" aria-labelledby="catalogTitle">
     <div class="catalog-intro"><div><div class="eyebrow">EL MUNDO DE RIENDAS DIEGO</div><h2 id="catalogTitle">Piezas con carácter</h2></div><p>Encuentra lo que necesitas para vivir tu pasión por el campo.</p></div>
@@ -363,7 +367,7 @@
   <div class="cart-footer" id="cartFooter"></div>
 </aside>
 <section id="detailDialog" class="dialog" aria-hidden="true" inert><div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><button class="dialog-close" type="button" data-close aria-label="Cerrar detalles"><svg class="close-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button><div id="detailBody"></div></div></section>
-<section id="checkoutDialog" class="dialog" aria-hidden="true" inert><div class="checkout-card" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle"><button class="dialog-close" type="button" data-close aria-label="Cerrar pedido"><svg class="close-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button><div class="eyebrow">ÚLTIMO PASO</div><h2 id="checkoutTitle">Confirmar pedido</h2><p class="intro">No realizamos cobros en esta página. Tu pedido se envía por WhatsApp para acordar disponibilidad, pago y envío.</p><div id="checkoutSummary" class="checkout-summary"></div><form id="checkoutForm"><label class="form-field"><span>Tu nombre *</span><input id="checkoutName" autocomplete="name" placeholder="Nombre completo" required maxlength="100"></label><label class="form-field"><span>Ciudad de entrega</span><input id="checkoutCity" autocomplete="address-level2" placeholder="Ciudad" maxlength="100"></label><label class="form-field"><span>Indicaciones (opcional)</span><textarea id="checkoutNotes" placeholder="Color, talla, preguntas o detalles del envío" maxlength="500"></textarea></label><button class="button" type="submit">Enviar por WhatsApp <span aria-hidden="true">↗</span></button></form><p class="checkout-note">El valor del envío y la disponibilidad definitiva se confirman directamente con la tienda.</p></div></section>
+<section id="checkoutDialog" class="dialog" aria-hidden="true" inert><div class="checkout-card" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle"><button class="dialog-close" type="button" data-close aria-label="Cerrar pedido"><svg class="close-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button><div class="eyebrow">ÚLTIMO PASO</div><h2 id="checkoutTitle">Confirmar pedido</h2><p class="intro">No realizamos cobros en esta página. Tu pedido se envía por WhatsApp para acordar disponibilidad, pago y envío.</p><div id="checkoutSummary" class="checkout-summary"></div><form id="checkoutForm"><label class="form-field"><span>Tu nombre *</span><input id="checkoutName" autocomplete="name" placeholder="Nombre completo" required maxlength="100"></label><label class="form-field"><span>Ciudad de entrega</span><input id="checkoutCity" autocomplete="address-level2" placeholder="Ciudad" maxlength="100"></label><label class="form-field"><span>Indicaciones (opcional)</span><textarea id="checkoutNotes" placeholder="Color, talla, preguntas o detalles del envío" maxlength="500"></textarea></label><button class="button" type="submit">Enviar por WhatsApp <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></button></form><p class="checkout-note">El valor del envío y la disponibilidad definitiva se confirman directamente con la tienda.</p></div></section>
 <section id="favoritesDialog" class="dialog" aria-hidden="true" inert><div class="favorites-card" role="dialog" aria-modal="true" aria-labelledby="favoritesTitle"><button class="dialog-close" type="button" data-close aria-label="Cerrar favoritos"><svg class="close-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button><div class="eyebrow">TU LISTA</div><h2 id="favoritesTitle">Guardados con cariño</h2><div id="favoritesList"></div></div></section>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText">Producto agregado</span><button id="toastCart" type="button">Ver carrito</button></div>
 <a class="wa-float" id="waFloat" href="https://wa.me/573207534152" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M19.11 17.53c-.27-.14-1.6-.79-1.84-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.27 0 1.34.98 2.63 1.11 2.81.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.55.58.65.21 1.24.18 1.71.11.52-.08 1.6-.65 1.82-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32zM16 3C8.83 3 3 8.83 3 16c0 2.3.61 4.55 1.77 6.53L3 29l6.65-1.74A12.94 12.94 0 0 0 16 29c7.17 0 13-5.83 13-13S23.17 3 16 3zm0 23.73c-2.03 0-4.03-.55-5.77-1.58l-.41-.24-3.95 1.03 1.05-3.85-.27-.4A10.7 10.7 0 0 1 5.27 16C5.27 10.08 10.08 5.27 16 5.27S26.73 10.08 26.73 16 21.92 26.73 16 26.73z"/></svg></a>
@@ -426,7 +430,7 @@ function renderProducts(){
         ${p.agotado?'<span class="sold-out">Agotado</span>':''}
       </div>
       <div class="product-info"><div class="eyebrow">${safe(p.category)}</div><button class="product-name" type="button" data-view="${p.id}">${safe(p.name)}</button><div class="product-price">${money(p.price)}</div>
-      <div class="product-cta"><button class="button button-outline" type="button" data-view="${p.id}">Ver producto <span aria-hidden="true">↗</span></button>${!p.agotado?`<button class="quick-add" data-add="${p.id}" aria-label="Agregar ${safe(p.name)} al carrito" type="button"><svg class="control-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>`:''}</div></div>
+      <div class="product-cta"><button class="button button-outline" type="button" data-view="${p.id}">Ver producto <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></button>${!p.agotado?`<button class="quick-add" data-add="${p.id}" aria-label="Agregar ${safe(p.name)} al carrito" type="button"><svg class="control-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>`:''}</div></div>
     </article>`}).join(''):`<div class="empty-results"><h3>No encontramos productos</h3><p>Prueba otra búsqueda o explora toda la colección.</p><button class="button button-outline" type="button" data-reset>Ver toda la colección</button></div>`;
   observeMotion($('productGrid'));
 }
@@ -450,7 +454,7 @@ function renderCart(){
         <div class="cart-item-bottom"><div class="stepper"><button type="button" data-dec="${p.id}" aria-label="Restar uno de ${safe(p.name)}">−</button><output aria-label="Cantidad">${qty}</output><button type="button" data-inc="${p.id}" ${qty>=99?'disabled':''} aria-label="Añadir uno de ${safe(p.name)}">+</button></div><button type="button" class="remove-btn" data-remove="${p.id}">Eliminar</button></div>
       </div></div>`).join(''):`<div class="cart-empty"><svg viewBox="0 0 24 24"><path d="M3 3h2l2.2 11.3a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.5L22 7H6"/><circle cx="10" cy="20" r="1"/><circle cx="18.5" cy="20" r="1"/></svg><h3>Tu carrito está vacío</h3><p>Las piezas que elijas aparecerán aquí para que puedas revisarlas.</p><button class="button button-outline" type="button" data-close>Explorar colección</button></div>`;
   $('cartFooter').hidden=!entries.length;
-  $('cartFooter').innerHTML=entries.length?`<div class="cart-amount"><span>Subtotal</span><strong>${money(total)}</strong></div><p class="cart-footnote">Envío no incluido · Se calcula al confirmar por WhatsApp.</p><button class="button" type="button" id="goCheckout">Continuar pedido <span aria-hidden="true">↗</span></button><button class="continue" type="button" data-close>Seguir explorando</button>`:'';
+  $('cartFooter').innerHTML=entries.length?`<div class="cart-amount"><span>Subtotal</span><strong>${money(total)}</strong></div><p class="cart-footnote">Envío no incluido · Se calcula al confirmar por WhatsApp.</p><button class="button" type="button" id="goCheckout">Continuar pedido <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></button><button class="continue" type="button" data-close>Seguir explorando</button>`:'';
   updateCounts();persist();
 }
 function renderFavorites(){
@@ -471,7 +475,7 @@ function makeDetail(id){
       <p class="detail-description">${safe(p.description)}</p>
       <ul class="detail-checks"><li>${svgCheck} Consulta medidas, colores y acabados</li><li>${svgCheck} Envíos a todo Colombia</li><li>${svgCheck} 6 meses de garantía</li></ul>
       <div class="detail-actions">${p.agotado?'':`<div class="detail-quantity"><span>Cantidad</span><div class="stepper"><button type="button" data-detail-dec aria-label="Reducir cantidad"><svg class="control-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><output id="detailQtyValue">1</output><button type="button" data-detail-inc aria-label="Aumentar cantidad"><svg class="control-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button></div></div>`}
-      <button class="button" type="button" ${p.agotado?'disabled':''} data-detail-add>${p.agotado?'Producto agotado':'Agregar al carrito'} ${p.agotado?'':'<span aria-hidden="true">↗</span>'}</button>
+      <button class="button" type="button" ${p.agotado?'disabled':''} data-detail-add>${p.agotado?'Producto agotado':'Agregar al carrito'} ${p.agotado?'':'<svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg>'}</button>
       <a class="detail-whatsapp" href="${waProductLink(p)}" target="_blank" rel="noopener noreferrer">${p.agotado?'Preguntar cuándo vuelve':'¿Tienes preguntas? Escríbenos por WhatsApp'}</a></div>
     </div></div>`;
   openLayer('detail');
