@@ -105,9 +105,7 @@
     .wa-float{position:fixed;z-index:35;right:20px;bottom:20px;width:48px;height:48px;background:#151515;color:#fff;border-radius:50%;display:grid;place-items:center;box-shadow:0 10px 35px #0003;transition:transform .2s}.wa-float:hover{transform:translateY(-3px)}.wa-float svg{width:25px;height:25px;fill:#fff}body.locked .wa-float{visibility:hidden}
 
     /* 2026 · Coherencia de tema, navegación y experiencia de compra */
-    .theme-head{margin-left:3px}.theme-head .sun-icon{display:none}
-    :root[data-theme="dark"] .theme-head .sun-icon{display:block}
-    :root[data-theme="dark"] .theme-head .moon-icon{display:none}
+    .theme-head{margin-left:3px}
     :root[data-theme="dark"] .hero{background:#101010;color:#f5f5f5}
     :root[data-theme="dark"] .hero-copy .eyebrow{color:#adadad}
     :root[data-theme="dark"] .hero h1 em{color:#c7c7c7}
@@ -277,6 +275,58 @@
       .hero-mark,.hero-art:after,.wa-float{animation:none!important}
       .close-x:hover,.dialog-close:hover{transform:none}
     }
+
+    /* V4 · Interacciones de iconos: precisas, discretas y accesibles. */
+    .wa-float{display:flex;align-items:center;justify-content:center;padding:0}
+    .wa-float > svg{
+      position:relative;display:block;flex:0 0 28px;width:28px;height:28px;
+      transform:translate(1.25px,-.35px);transform-origin:center center;
+      fill:currentColor;
+    }
+    @media(max-width:650px){.wa-float > svg{flex-basis:27px;width:27px;height:27px;transform:translate(1.2px,-.3px)}}
+    .theme-head{display:inline-flex;align-items:center;justify-content:center}
+    .theme-symbol{width:22px;height:22px;flex:0 0 22px;position:relative;display:inline-grid;place-items:center}
+    .theme-symbol svg{
+      position:absolute;inset:0;width:22px;height:22px;stroke:currentColor;fill:none;
+      stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;
+      transform-origin:50% 50%;
+      transition:transform .55s cubic-bezier(.2,.9,.18,1),opacity .38s ease;
+      will-change:transform,opacity;
+    }
+    .theme-symbol .moon-icon{display:block;opacity:1;transform:rotate(0deg) scale(1)}
+    .theme-symbol .sun-icon{display:block;opacity:0;transform:rotate(-85deg) scale(.35)}
+    :root[data-theme="dark"] .theme-symbol .moon-icon{opacity:0;transform:rotate(85deg) scale(.35)}
+    :root[data-theme="dark"] .theme-symbol .sun-icon{opacity:1;transform:rotate(0deg) scale(1)}
+    .theme-menu .theme-symbol{color:var(--ink)}
+    .mobile-menu .theme-menu{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    @keyframes rdIconHeartbeat{
+      0%,100%{transform:scale(1)}
+      19%{transform:scale(1.27)}
+      40%{transform:scale(.93)}
+      59%{transform:scale(1.16)}
+      79%{transform:scale(.98)}
+    }
+    @keyframes rdThemePulse{
+      0%,100%{transform:scale(1)}
+      38%{transform:scale(.78)}
+      72%{transform:scale(1.12)}
+    }
+    @keyframes rdCartTap{
+      0%,100%{transform:translateY(0) rotate(0deg) scale(1)}
+      28%{transform:translateY(-4px) rotate(-9deg) scale(1.12)}
+      58%{transform:translateY(2px) rotate(5deg) scale(.96)}
+      82%{transform:translateY(-1px) rotate(-2deg) scale(1.02)}
+    }
+    @media(prefers-reduced-motion:no-preference){
+      .favorite-btn.heart-beat > svg,.favorite-head.heart-beat > svg{animation:rdIconHeartbeat .64s cubic-bezier(.2,.72,.3,1) both}
+      .theme-switching .theme-symbol{animation:rdThemePulse .55s ease both}
+      .cart-head.cart-bump > svg{animation:rdCartTap .62s cubic-bezier(.25,.76,.21,1) both}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .theme-symbol svg{transition:none!important;will-change:auto}
+      .favorite-btn.heart-beat > svg,.favorite-head.heart-beat > svg,
+      .theme-switching .theme-symbol,.cart-head.cart-bump > svg{animation:none!important}
+    }
   </style>
 </head>
 <body>
@@ -302,8 +352,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.7" cy="10.7" r="6.7"/><path d="m16 16 5 5"/></svg>
       </button>
       <button id="desktopThemeToggle" class="icon-btn theme-head" type="button" aria-label="Activar modo oscuro" aria-pressed="false" title="Cambiar entre modo claro y oscuro">
-        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.1 15.3A8.5 8.5 0 0 1 8.7 3.9a8.5 8.5 0 1 0 11.4 11.4z"/></svg>
-        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+        <span class="theme-symbol" aria-hidden="true"><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.1 15.3A8.5 8.5 0 0 1 8.7 3.9a8.5 8.5 0 1 0 11.4 11.4z"/></svg><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></span>
       </button>
     </div>
   </div>
@@ -316,7 +365,7 @@
   <div class="menu-label">Explorar</div>
   <a href="#catalogo">Toda la colección</a><a href="#quienes-somos">La marca</a><a href="#contacto">Contacto</a>
   <button type="button" id="mobileFavorites">Mis favoritos <span id="mobileFavCount">(0)</span></button>
-  <button type="button" id="themeToggle" class="theme-menu">Cambiar a modo oscuro</button>
+  <button type="button" id="themeToggle" class="theme-menu"><span class="theme-menu-label">Cambiar a modo oscuro</span><span class="theme-symbol" aria-hidden="true"><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.1 15.3A8.5 8.5 0 0 1 8.7 3.9a8.5 8.5 0 1 0 11.4 11.4z"/></svg><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></span></button>
 </nav>
 <main id="main">
 <section class="hero" id="inicio" aria-label="Riendas Diego">
@@ -530,7 +579,14 @@ function addToCart(id,qty=1,fromDetail=false){
 }
 function toggleFavorite(id){
   const found=favorites.includes(+id);favorites=found?favorites.filter(x=>x!==+id):favorites.concat(+id);
-  document.querySelectorAll(`[data-favorite="${+id}"]`).forEach(btn=>{const on=!found;btn.classList.toggle('is-on',on);btn.setAttribute('aria-pressed',String(on));btn.setAttribute('aria-label',(on?'Quitar de':'Añadir a')+' favoritos: '+getProduct(id).name)});
+  document.querySelectorAll(`[data-favorite="${+id}"]`).forEach(btn=>{
+    const on=!found;
+    btn.classList.toggle('is-on',on);
+    btn.setAttribute('aria-pressed',String(on));
+    btn.setAttribute('aria-label',(on?'Quitar de':'Añadir a')+' favoritos: '+getProduct(id).name);
+    retriggerMotion(btn,'heart-beat');
+  });
+  retriggerMotion($('favoritesOpen'),'heart-beat');
   renderFavorites();
 }
 function setCategory(category){activeCategory=category;renderProducts();}
@@ -561,10 +617,10 @@ document.addEventListener('click',event=>{
   if(el.id==='goCheckout'){openLayer('checkout');return;}
   if(el.closest('#mobileMenu') && el.tagName==='A')closeMenu(false);
 });
-$('cartOpen').addEventListener('click',()=>openLayer('cart'));
+$('cartOpen').addEventListener('click',()=>{bumpCart();openLayer('cart')});
 $('cartClose').addEventListener('click',()=>closeLayer());
 $('menuOpen').addEventListener('click',()=>activeLayer==='menu'?closeMenu():openMenu());
-$('favoritesOpen').addEventListener('click',()=>openLayer('favorites'));
+$('favoritesOpen').addEventListener('click',()=>{retriggerMotion($('favoritesOpen'),'heart-beat');openLayer('favorites')});
 $('mobileFavorites').addEventListener('click',()=>openLayer('favorites'));
 $('searchOpen').addEventListener('click',toggleSearch);
 $('searchInput').addEventListener('input',event=>{searchQuery=event.target.value.trim().toLocaleLowerCase('es');renderProducts();const n=listedProducts().length;$('searchHint').textContent=searchQuery?(n===1?'1 resultado encontrado':`${n} resultados encontrados`):'Busca por producto o categoría · Esc para cerrar.';});
@@ -577,7 +633,7 @@ $('toastCart').addEventListener('click',()=>{$('toast').classList.remove('show')
 function setTheme(next,save=true){
   const dark=next==='dark';
   document.documentElement.dataset.theme=dark?'dark':'light';
-  $('themeToggle').textContent=dark?'Cambiar a modo claro':'Cambiar a modo oscuro';
+  $('themeToggle').querySelector('.theme-menu-label').textContent=dark?'Cambiar a modo claro':'Cambiar a modo oscuro';
   $('desktopThemeToggle').setAttribute('aria-label',dark?'Activar modo claro':'Activar modo oscuro');
   $('desktopThemeToggle').setAttribute('aria-pressed',String(dark));
   $('desktopThemeToggle').title=dark?'Activar modo claro':'Activar modo oscuro';
@@ -616,8 +672,22 @@ function bumpCart(){
   void btn.offsetWidth;btn.classList.add('cart-bump');
 }
 $('cartOpen').addEventListener('animationend',()=> $('cartOpen').classList.remove('cart-bump'));
+document.addEventListener('animationend', event => {
+  if(event.animationName==='rdIconHeartbeat') event.target.closest('.heart-beat')?.classList.remove('heart-beat');
+  if(event.animationName==='rdThemePulse') event.target.closest('.theme-switching')?.classList.remove('theme-switching');
+});
 
-function toggleTheme(){setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')}
+function retriggerMotion(el, className){
+  if(!el || motionQuery.matches)return;
+  el.classList.remove(className);
+  void el.offsetWidth; // reiniciar la animación incluso con varios clics consecutivos
+  el.classList.add(className);
+}
+function toggleTheme(){
+  setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
+  retriggerMotion($('desktopThemeToggle'),'theme-switching');
+  retriggerMotion($('themeToggle'),'theme-switching');
+}
 $('themeToggle').addEventListener('click',toggleTheme);
 $('desktopThemeToggle').addEventListener('click',toggleTheme);
 document.addEventListener('keydown',event=>{
