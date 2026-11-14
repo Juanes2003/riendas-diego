@@ -234,7 +234,7 @@
       .trust-strip span:nth-child(2){animation-delay:.56s}
       .trust-strip span:nth-child(3){animation-delay:.66s}
       .search-pop:not([hidden]){animation:rdSearchOpen .3s both var(--ease)}
-      .wa-float{animation:rdWaEnter .7s .75s both var(--ease)}
+      .wa-float{animation:rdWaEnter .7s .75s backwards var(--ease)}
       .favorite-btn.is-on svg{animation:rdHeartPop .38s var(--ease)}
       .cart-head.cart-bump svg{animation:rdCartBounce .48s var(--ease)}
       .product-photo,.product-card .media-art,.product-card .product-info{transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
@@ -253,7 +253,7 @@
       .dialog.open .dialog-card,.dialog.open .checkout-card,.dialog.open .favorites-card{transform:translateY(0) scale(1)}
       .cart-item{animation:rdSoftRise .37s both var(--ease)}
       .cart-item:nth-child(2){animation-delay:.05s}.cart-item:nth-child(3){animation-delay:.10s}
-      .motion-reveal{opacity:0;transform:translate3d(0,25px,0)}
+      .motion-reveal{transform:translate3d(0,10px,0)}
       .motion-reveal.motion-visible{opacity:1;transform:translate3d(0,0,0);transition:opacity .78s var(--ease),transform .78s var(--ease);transition-delay:var(--enter-delay,0ms)}
       .site-header,.about,.product-card,.side-list{transition-property:background-color,color,border-color;transition-duration:.35s}
       body,.site-header,.site-footer,.hero,.hero-art,.product-photo,.media-art,.drawer,.dialog-card,.favorites-card,.checkout-card,.button,.side-list button{transition:background-color .34s ease,color .34s ease,border-color .34s ease,box-shadow .34s ease}
@@ -277,13 +277,6 @@
     }
 
     /* V4 · Interacciones de iconos: precisas, discretas y accesibles. */
-    .wa-float{display:flex;align-items:center;justify-content:center;padding:0}
-    .wa-float > svg{
-      position:relative;display:block;flex:0 0 28px;width:28px;height:28px;
-      transform:translate(1.25px,-.35px);transform-origin:center center;
-      fill:currentColor;
-    }
-    @media(max-width:650px){.wa-float > svg{flex-basis:27px;width:27px;height:27px;transform:translate(1.2px,-.3px)}}
     .theme-head{display:inline-flex;align-items:center;justify-content:center}
     .theme-symbol{width:22px;height:22px;flex:0 0 22px;position:relative;display:inline-grid;place-items:center}
     .theme-symbol svg{
@@ -327,6 +320,15 @@
       .favorite-btn.heart-beat > svg,.favorite-head.heart-beat > svg,
       .theme-switching .theme-symbol,.cart-head.cart-bump > svg{animation:none!important}
     }
+      .catalog-controls{border-bottom:1px solid var(--line);margin-bottom:23px}
+    .catalog-controls .sortbar{margin:0;border:0;padding-bottom:4px}
+    .catalog-tools{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;padding-bottom:4px;color:var(--muted);font-size:12px}
+    .stock-filter{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;color:var(--ink)}
+    .stock-filter input{margin:0;width:16px;height:16px;accent-color:var(--ink)}
+    .search-summary{display:inline-flex;align-items:center;gap:6px;max-width:100%}
+    .search-summary[hidden]{display:none}
+    .search-summary span{overflow-wrap:anywhere}
+    .search-summary button{width:44px;height:44px;flex:none;border:0;background:transparent;color:var(--ink);font-size:19px;line-height:1}
   </style>
 </head>
 <body>
@@ -397,8 +399,20 @@
   </aside>
   <section class="catalog" aria-labelledby="catalogTitle">
     <div class="catalog-intro"><div><div class="eyebrow">EL MUNDO DE RIENDAS DIEGO</div><h2 id="catalogTitle">Piezas con carácter</h2></div><p>Encuentra lo que necesitas para vivir tu pasión por el campo.</p></div>
-    <div class="sortbar"><span id="resultsText" role="status" aria-live="polite">Mostrando productos</span><label for="sortSelect">Ordenar por <select id="sortSelect"><option value="default">Destacados</option><option value="price-asc">Menor precio</option><option value="price-desc">Mayor precio</option><option value="name">Nombre A–Z</option></select></label></div>
+    <div class="catalog-controls">
+    <div class="sortbar"><span id="resultsText" role="status" aria-live="polite"></span><label for="sortSelect">Ordenar por <select id="sortSelect"><option value="default">Destacados</option><option value="price-asc">Menor precio</option><option value="price-desc">Mayor precio</option><option value="name">Nombre A–Z</option></select></label></div>
+    <div class="catalog-tools">
+      <label class="stock-filter"><input type="checkbox" id="hideSoldOut"> Ocultar agotados</label>
+      <div class="search-summary" id="searchSummary" hidden><span id="searchTerm"></span><button id="clearSearch" type="button" aria-label="Quitar búsqueda">×</button></div>
+    </div>
+    </div>
+    <p id="catalogSyncNote" hidden>Consulta el precio y la disponibilidad por WhatsApp. Estamos mostrando una copia del catálogo.</p>
     <div class="product-grid" id="productGrid"></div>
+    <noscript>
+      <style>.catalog-controls,#productGrid,#categoryList,.site-header .icon-btn{display:none!important}</style>
+      <p>Abre esta tienda en un navegador con JavaScript para usar el catálogo y el carrito.</p>
+      <p><a class="button button-outline" href="https://wa.me/573207534152">Consultar productos por WhatsApp</a></p>
+    </noscript>
   </section>
 </div>
 <section class="container about" id="quienes-somos"><div><div class="eyebrow">CONÓCENOS</div><h2>Una marca nueva,<br>hecha para ti.</h2></div><p><strong style="color:var(--ink);font-weight:550">Riendas Diego</strong> nace para ofrecer productos de cuero y accesorios para el mundo equino y ganadero. Estamos construyendo una marca cercana, con atención personalizada, diseños cuidados y calidad para el día a día.</p></section>
@@ -419,12 +433,14 @@
 <section id="checkoutDialog" class="dialog" aria-hidden="true" inert><div class="checkout-card" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle"><button class="dialog-close" type="button" data-close aria-label="Cerrar pedido"><svg class="close-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button><div class="eyebrow">ÚLTIMO PASO</div><h2 id="checkoutTitle">Confirmar pedido</h2><p class="intro">No realizamos cobros en esta página. Tu pedido se envía por WhatsApp para acordar disponibilidad, pago y envío.</p><div id="checkoutSummary" class="checkout-summary"></div><form id="checkoutForm"><label class="form-field"><span>Tu nombre *</span><input id="checkoutName" autocomplete="name" placeholder="Nombre completo" required maxlength="100"></label><label class="form-field"><span>Ciudad de entrega</span><input id="checkoutCity" autocomplete="address-level2" placeholder="Ciudad" maxlength="100"></label><label class="form-field"><span>Indicaciones (opcional)</span><textarea id="checkoutNotes" placeholder="Color, talla, preguntas o detalles del envío" maxlength="500"></textarea></label><button class="button" type="submit">Enviar por WhatsApp <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></button></form><p class="checkout-note">El valor del envío y la disponibilidad definitiva se confirman directamente con la tienda.</p></div></section>
 <section id="favoritesDialog" class="dialog" aria-hidden="true" inert><div class="favorites-card" role="dialog" aria-modal="true" aria-labelledby="favoritesTitle"><button class="dialog-close" type="button" data-close aria-label="Cerrar favoritos"><svg class="close-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button><div class="eyebrow">TU LISTA</div><h2 id="favoritesTitle">Guardados con cariño</h2><div id="favoritesList"></div></div></section>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText">Producto agregado</span><button id="toastCart" type="button">Ver carrito</button></div>
-<a class="wa-float" id="waFloat" href="https://wa.me/573207534152" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M19.11 17.53c-.27-.14-1.6-.79-1.84-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.27 0 1.34.98 2.63 1.11 2.81.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.55.58.65.21 1.24.18 1.71.11.52-.08 1.6-.65 1.82-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32zM16 3C8.83 3 3 8.83 3 16c0 2.3.61 4.55 1.77 6.53L3 29l6.65-1.74A12.94 12.94 0 0 0 16 29c7.17 0 13-5.83 13-13S23.17 3 16 3zm0 23.73c-2.03 0-4.03-.55-5.77-1.58l-.41-.24-3.95 1.03 1.05-3.85-.27-.4A10.7 10.7 0 0 1 5.27 16C5.27 10.08 10.08 5.27 16 5.27S26.73 10.08 26.73 16 21.92 26.73 16 26.73z"/></svg></a>
+<a class="wa-float" id="waFloat" href="https://wa.me/573207534152" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"><svg viewBox="-1 -1 34 34" aria-hidden="true"><path d="M19.11 17.53c-.27-.14-1.6-.79-1.84-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.27 0 1.34.98 2.63 1.11 2.81.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.55.58.65.21 1.24.18 1.71.11.52-.08 1.6-.65 1.82-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32zM16 3C8.83 3 3 8.83 3 16c0 2.3.61 4.55 1.77 6.53L3 29l6.65-1.74A12.94 12.94 0 0 0 16 29c7.17 0 13-5.83 13-13S23.17 3 16 3zm0 23.73c-2.03 0-4.03-.55-5.77-1.58l-.41-.24-3.95 1.03 1.05-3.85-.27-.4A10.7 10.7 0 0 1 5.27 16C5.27 10.08 10.08 5.27 16 5.27S26.73 10.08 26.73 16 21.92 26.73 16 26.73z"/></svg></a>
 <script>
 'use strict';
 /* Catálogo editable: precios y disponibilidad proceden del archivo original y deben confirmarse antes de publicar. Para añadir fotos, usa image: 'archivo.png' o images: ['frontal.png','detalle.png']. */
 const WHATSAPP = '573207534152';
-const PRODUCTS = [
+// Pega aquí el enlace CSV de la pestaña Productos, obtenido con «Publicar en la web».
+const GOOGLE_SHEETS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4Fp9alr9nXNC0lrVEME1g_3Jv5Y7HjUFzni-W4oiyCbdMDBC9F7Lu1Q8wP7yYhA/pub?gid=1890567858&single=true&output=csv';
+let PRODUCTS = [
   {id:1,name:'Rienda Clásica Trenzada',price:180000,agotado:true,category:'Accesorios',image:'catalogo-1.png',description:'Una pieza de líneas tradicionales, pensada para quienes prefieren un estilo clásico en sus accesorios ecuestres.'},
   {id:2,name:'Rienda Doble Costura',price:180000,agotado:false,category:'Accesorios',description:'Una alternativa de apariencia sobria con detalles de costura que aportan carácter a su diseño.'},
   {id:3,name:'Rienda Plana Premium',price:180000,agotado:true,category:'Accesorios',description:'Un diseño de perfil limpio y acabado sencillo para una estética ecuestre atemporal.'},
@@ -445,12 +461,16 @@ const getProduct = id => PRODUCTS.find(p => p.id === Number(id));
 const readStorage = (name, fallback) => {try{const data=JSON.parse(localStorage.getItem(name));return data??fallback}catch{return fallback}};
 let cart = readStorage('rd_cart', readStorage('cart', {}));
 let favorites = readStorage('rd_favorites', readStorage('favs', []));
-let activeCategory = '', searchQuery = '', sortMode = 'default', activeProduct = null, detailQty = 1;
+let activeCategory = '', searchQuery = '', hideSoldOut = false, sortMode = 'default', activeProduct = null, detailQty = 1;
 let activeLayer = '', lastFocus = null, toastTimer;
 if(!cart || typeof cart!=='object' || Array.isArray(cart)) cart={};
-cart=Object.fromEntries(Object.entries(cart).filter(([id,qty])=>getProduct(id)&&!getProduct(id).agotado&&Number.isInteger(+qty)&&+qty>0).map(([id,qty])=>[id,Math.min(99,+qty)]));
 if(!Array.isArray(favorites)) favorites=[];
-favorites=[...new Set(favorites.map(Number).filter(id=>getProduct(id)))];
+function reconcileSelections(){
+  cart = Object.fromEntries(Object.entries(cart)
+    .filter(([id,qty]) => getProduct(id) && !getProduct(id).agotado && Number.isInteger(+qty) && +qty > 0)
+    .map(([id,qty]) => [id, Math.min(99,+qty)]));
+  favorites = [...new Set(favorites.map(Number).filter(id => getProduct(id)))];
+}
 const persist = () => {try{localStorage.setItem('rd_cart',JSON.stringify(cart));localStorage.setItem('rd_favorites',JSON.stringify(favorites))}catch{}};
 const svgHeart = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.7a5.4 5.4 0 0 0-7.6 0L12 5.9l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.7a5.4 5.4 0 0 0 0-7.6Z"/></svg>';
 const svgCheck = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>';
@@ -459,8 +479,15 @@ function imageMarkup(product, compact=false){
   const file=(Array.isArray(product.images) && product.images[0]) || product.image;
   return `${mediaArt(compact)}${file?`<img src="${safe(file)}" alt="${safe(product.name)}" loading="lazy" decoding="async" onerror="this.remove()">`:''}`;
 }
+const normalizeSearch = value => value.toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 function listedProducts(){
-  let arr=PRODUCTS.filter(p=> (!activeCategory || p.category===activeCategory) && (!searchQuery || (p.name+' '+p.category).toLocaleLowerCase('es').includes(searchQuery)));
+  const terms = normalizeSearch(searchQuery).split(/\s+/).filter(Boolean);
+  const arr = PRODUCTS.filter(product => {
+    if (activeCategory && product.category !== activeCategory) return false;
+    if (hideSoldOut && product.agotado) return false;
+    const searchable = normalizeSearch(product.name + ' ' + product.category);
+    return terms.every(term => searchable.includes(term));
+  });
   if(sortMode==='price-asc')arr.sort((a,b)=>a.price-b.price);
   if(sortMode==='price-desc')arr.sort((a,b)=>b.price-a.price);
   if(sortMode==='name')arr.sort((a,b)=>a.name.localeCompare(b.name,'es'));
@@ -468,6 +495,8 @@ function listedProducts(){
 }
 function renderProducts(){
   const list=listedProducts();
+  $('searchSummary').hidden = !searchQuery;
+  $('searchTerm').textContent = searchQuery ? 'Búsqueda: ' + searchQuery : '';
   $('resultsText').textContent=list.length===1?'1 producto':`${list.length} productos`;
   document.querySelectorAll('[data-category]').forEach(btn=>{const yes=btn.dataset.category===activeCategory;btn.classList.toggle('active',yes);btn.setAttribute('aria-pressed',String(yes))});
   $('productGrid').innerHTML=list.length?list.map((p,index)=>{
@@ -480,7 +509,7 @@ function renderProducts(){
       </div>
       <div class="product-info"><div class="eyebrow">${safe(p.category)}</div><button class="product-name" type="button" data-view="${p.id}">${safe(p.name)}</button><div class="product-price">${money(p.price)}</div>
       <div class="product-cta"><button class="button button-outline" type="button" data-view="${p.id}">Ver producto <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></button>${!p.agotado?`<button class="quick-add" data-add="${p.id}" aria-label="Agregar ${safe(p.name)} al carrito" type="button"><svg class="control-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>`:''}</div></div>
-    </article>`}).join(''):`<div class="empty-results"><h3>No encontramos productos</h3><p>Prueba otra búsqueda o explora toda la colección.</p><button class="button button-outline" type="button" data-reset>Ver toda la colección</button></div>`;
+    </article>`}).join(''):`<div class="empty-results"><h3>No encontramos productos</h3><p>Ajusta los filtros o explora toda la colección.</p><button class="button button-outline" type="button" data-reset>Ver toda la colección</button></div>`;
   observeMotion($('productGrid'));
 }
 function cartSummary(){
@@ -508,7 +537,7 @@ function renderCart(){
 }
 function renderFavorites(){
   $('favoritesList').innerHTML=favorites.length?favorites.map(id=>{
-    const p=getProduct(id);return `<div class="favorite-line"><div><b>${safe(p.name)}</b><small>${money(p.price)} ${p.agotado?'· Agotado':''}</small></div><div><button type="button" data-view="${p.id}">Ver detalle</button> &nbsp; <button type="button" data-favorite="${p.id}" aria-label="Quitar ${safe(p.name)} de favoritos">Quitar</button></div></div>`;
+    const p=getProduct(id);if(!p)return '';return `<div class="favorite-line"><div><b>${safe(p.name)}</b><small>${money(p.price)} ${p.agotado?'· Agotado':''}</small></div><div><button type="button" data-view="${p.id}">Ver detalle</button> &nbsp; <button type="button" data-favorite="${p.id}" aria-label="Quitar ${safe(p.name)} de favoritos">Quitar</button></div></div>`;
   }).join(''):'<p style="font-size:13px;color:var(--muted)">Todavía no guardas productos. Toca el corazón de los que te gusten.</p>';
   updateCounts();persist();
 }
@@ -590,7 +619,13 @@ function toggleFavorite(id){
   renderFavorites();
 }
 function setCategory(category){activeCategory=category;renderProducts();}
-function clearFilters(){activeCategory='';searchQuery='';$('searchInput').value='';$('sortSelect').value='default';sortMode='default';renderProducts();}
+function clearFilters(){
+  activeCategory = '';
+  searchQuery = $('searchInput').value = '';
+  hideSoldOut = $('hideSoldOut').checked = false;
+  sortMode = $('sortSelect').value = 'default';
+  renderProducts();
+}
 // Click handling centralizado: evita recargas y mantiene favoritos / carrito sin recrear toda la página.
 document.addEventListener('click',event=>{
   const el=event.target.closest('button,a');if(!el)return;
@@ -623,10 +658,19 @@ $('menuOpen').addEventListener('click',()=>activeLayer==='menu'?closeMenu():open
 $('favoritesOpen').addEventListener('click',()=>{retriggerMotion($('favoritesOpen'),'heart-beat');openLayer('favorites')});
 $('mobileFavorites').addEventListener('click',()=>openLayer('favorites'));
 $('searchOpen').addEventListener('click',toggleSearch);
-$('searchInput').addEventListener('input',event=>{searchQuery=event.target.value.trim().toLocaleLowerCase('es');renderProducts();const n=listedProducts().length;$('searchHint').textContent=searchQuery?(n===1?'1 resultado encontrado':`${n} resultados encontrados`):'Busca por producto o categoría · Esc para cerrar.';});
+$('searchInput').addEventListener('input',event=>{searchQuery=event.target.value.trim();renderProducts();const n=listedProducts().length;$('searchHint').textContent=searchQuery?(n===1?'1 resultado encontrado':`${n} resultados encontrados`):'Busca por producto o categoría · Esc para cerrar.';});
 function revealSearchResults(){closeSearch();$('catalogo').scrollIntoView({behavior:'smooth',block:'start'});}
 $('searchResultsBtn').addEventListener('click',revealSearchResults);
 $('searchInput').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();revealSearchResults();}});
+$('hideSoldOut').addEventListener('change', event => {
+  hideSoldOut = event.target.checked;
+  renderProducts();
+});
+$('clearSearch').addEventListener('click', () => {
+  searchQuery = $('searchInput').value = '';
+  renderProducts();
+  $('hideSoldOut').focus({preventScroll:true});
+});
 $('sortSelect').addEventListener('change',event=>{sortMode=event.target.value;renderProducts()});
 $('backdrop').addEventListener('click',closeTop);
 $('toastCart').addEventListener('click',()=>{$('toast').classList.remove('show');openLayer('cart')});
@@ -641,7 +685,9 @@ function setTheme(next,save=true){
   if(save){try{localStorage.setItem('rd_theme',dark?'dark':'light')}catch{}}
 }
 /* Revelado progresivo seguro: sin invisibilidad permanente y con preferencia de movimiento reducido. */
-const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const motionQuery = window.matchMedia
+  ? window.matchMedia('(prefers-reduced-motion: reduce)')
+  : {matches:true};
 let motionObserver;
 if(!motionQuery.matches && 'IntersectionObserver' in window){
   motionObserver = new IntersectionObserver(entries=>{
@@ -706,7 +752,69 @@ $('checkoutForm').addEventListener('submit',event=>{
 });
 setTheme(document.documentElement.dataset.theme==='dark'?'dark':'light',false);
 $('year').textContent=new Date().getFullYear();
-renderProducts();renderCart();renderFavorites();observeMotion();
+function parseCatalog(csv){
+  const rows = [[]];
+  let field = '', quoted = false;
+  for(let i=0; i<csv.length; i++){
+    const char = csv[i];
+    if(char === '"'){
+      if(quoted && csv[i+1] === '"'){field += '"'; i++;}
+      else quoted = !quoted;
+    } else if(!quoted && (char === ',' || char === '\n')){
+      rows[rows.length-1].push(field.trim());
+      field = '';
+      if(char === '\n') rows.push([]);
+    } else field += char;
+  }
+  if(quoted) throw new Error('CSV incompleto');
+  rows[rows.length-1].push(field.trim());
+  const headers = rows.shift();
+  const columns = ['Producto','Precio COP','Estado','Categoría','Foto','Descripción','Código']
+    .map(label => headers.indexOf(label));
+  if(columns.includes(-1)) throw new Error('Faltan encabezados del catálogo');
+
+  const seen = new Set();
+  const categories = new Set([...document.querySelectorAll('#categoryList [data-category]')]
+    .map(button => button.dataset.category));
+  return rows.filter(row => row.some(Boolean)).flatMap(row => {
+    const [name, amount, state, category, image, description, code] = columns.map(index => row[index] ?? '');
+    const id = Number(code), price = Number(amount);
+    if(!name || !amount || !Number.isSafeInteger(price) || price < 0 ||
+       !Number.isSafeInteger(id) || id < 1 || seen.has(id) ||
+       !categories.has(category) || !['Disponible','Agotado','Oculto'].includes(state)){
+      throw new Error('Revisa las filas de la hoja');
+    }
+    seen.add(id);
+    if(state === 'Oculto') return [];
+    const photo = /^(https:\/\/[^\s]+|[\w.-]+\.(png|jpe?g|webp|avif))$/i.test(image) ? image : '';
+    return [{id,name,price,category,description,image:photo,agotado:state === 'Agotado'}];
+  });
+}
+async function startStore(){
+  let loaded = !GOOGLE_SHEETS_CSV;
+  if(GOOGLE_SHEETS_CSV){
+    $('resultsText').textContent = 'Cargando catálogo…';
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4500);
+    try{
+      const response = await fetch(GOOGLE_SHEETS_CSV, {cache:'no-store',signal:controller.signal});
+      if(!response.ok) throw new Error('Catálogo no disponible');
+      PRODUCTS = parseCatalog(await response.text());
+      loaded = true;
+    } catch(error){
+      console.warn('Riendas Diego: se muestra una copia del catálogo.', error);
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+  if(loaded) reconcileSelections();
+  $('catalogSyncNote').hidden = loaded;
+  renderProducts();
+  renderCart();
+  renderFavorites();
+  observeMotion();
+}
+startStore();
 </script>
 </body>
 </html>
